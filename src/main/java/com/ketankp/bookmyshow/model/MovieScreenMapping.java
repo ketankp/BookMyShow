@@ -25,6 +25,6 @@ public class MovieScreenMapping {
     public CinemaHallScreens screenId;
 
     public Timestamp startTime;
-    public Timestamp EndTime;
+    public Timestamp endTime;
 
 }

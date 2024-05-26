@@ -4,6 +4,7 @@ import com.ketankp.bookmyshow.dto.CinemaHallScreensResponseDto;
 import com.ketankp.bookmyshow.dto.MovieResponseDto;
 import com.ketankp.bookmyshow.dto.MovieScreenRequestDto;
 import com.ketankp.bookmyshow.dto.MovieScreenResponseDto;
+import com.ketankp.bookmyshow.exception.CustomBadRequestException;
 import com.ketankp.bookmyshow.exception.CustomInternalServerErrorException;
 import com.ketankp.bookmyshow.model.CinemaHallScreens;
 import com.ketankp.bookmyshow.model.Movie;
@@ -63,29 +64,37 @@ public class MovieScreenServiceImpl implements MovieScreenService {
             Date startTime = dateFormat.parse(movieScreenRequestDto.getStartTime());
             Date endTime = dateFormat.parse(movieScreenRequestDto.getEndTime());
 
-            movieScreenMapping.setStartTime(new Timestamp(startTime.getTime()));
-            movieScreenMapping.setEndTime(new Timestamp(endTime.getTime()));
+            List<MovieScreenMapping> movieScreenMappingList = movieScreenMappingRepository.findOverlappingScreen(movieScreenRequestDto.getCinemaHallScreenId(),new Timestamp(startTime.getTime()),new Timestamp(endTime.getTime()));
+            if(!movieScreenMappingList.isEmpty()){
+                throw new CustomBadRequestException("Overlapping screens","");
+            }else{
+                movieScreenMapping.setStartTime(new Timestamp(startTime.getTime()));
+                movieScreenMapping.setEndTime(new Timestamp(endTime.getTime()));
 
-            CinemaHallScreens cinemaHallScreens = new CinemaHallScreens();
-            cinemaHallScreens.setCinemaHallScreensId(movieScreenRequestDto.getCinemaHallScreenId());
-            movieScreenMapping.setScreenId(cinemaHallScreens);
+                CinemaHallScreens cinemaHallScreens = new CinemaHallScreens();
+                cinemaHallScreens.setCinemaHallScreensId(movieScreenRequestDto.getCinemaHallScreenId());
+                movieScreenMapping.setScreenId(cinemaHallScreens);
 
-            Movie movie = new Movie();
-            movie.setMovieId(movieScreenRequestDto.getMovieId());
-            movieScreenMapping.setMovieId(movie);
+                Movie movie = new Movie();
+                movie.setMovieId(movieScreenRequestDto.getMovieId());
+                movieScreenMapping.setMovieId(movie);
 
-            movieScreenMappingRepository.saveAndFlush(movieScreenMapping);
-            entityManager.refresh(movieScreenMapping);
+                movieScreenMappingRepository.saveAndFlush(movieScreenMapping);
+                entityManager.refresh(movieScreenMapping);
 
-            return MovieScreenResponseDto.builder()
-                    .movieScreenMappingId(movieScreenMapping.getMovieScreenMappingId())
-                    .movie(modelMapper.map(movieScreenMapping.getMovieId(),MovieResponseDto.class))
-                    .cinemaHallScreen(modelMapper.map(movieScreenMapping.getScreenId(),CinemaHallScreensResponseDto.class))
-                    .startTime(sdf.format(movieScreenMapping.getStartTime()))
-                    .endTime(sdf.format(movieScreenMapping.getEndTime()))
-                    .build();
+                return MovieScreenResponseDto.builder()
+                        .movieScreenMappingId(movieScreenMapping.getMovieScreenMappingId())
+                        .movie(modelMapper.map(movieScreenMapping.getMovieId(),MovieResponseDto.class))
+                        .cinemaHallScreen(modelMapper.map(movieScreenMapping.getScreenId(),CinemaHallScreensResponseDto.class))
+                        .startTime(sdf.format(movieScreenMapping.getStartTime()))
+                        .endTime(sdf.format(movieScreenMapping.getEndTime()))
+                        .build();
 
-        }catch (Exception e){
+            }
+
+        }catch (CustomBadRequestException e){
+            throw new CustomBadRequestException(e.getMessage(),e.getDetails());
+        } catch (Exception e){
             throw new CustomInternalServerErrorException("Error while saving movie screen",e);
         }
 
