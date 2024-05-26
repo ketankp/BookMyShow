@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Date;
+
 @Getter
 @Setter
 @Entity
@@ -17,5 +19,6 @@ public class Movie {
     public String movieName;
     public String movieGenre;
     public int movieDurationInMinutes;
+    public Date releaseDate;
 
 }

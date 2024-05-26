@@ -1,6 +1,7 @@
 package com.ketankp.bookmyshow.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,10 @@ public class CinemaHallScreens {
     @ManyToOne
     @JoinColumn(name = "screen_type")
     public ScreenType screenType;
+
+    @ManyToOne
+    @JoinColumn(name = "cinema_hall")
+    public CinemaHall cinemaHall;
 
     public int noOfSeats;
 }
