@@ -16,9 +16,9 @@ public class MovieController {
 
     private final MovieService movieService;
 
-    @GetMapping("{id}")
+    @GetMapping("{movieId}")
     @ResponseStatus(HttpStatus.OK)
-    public MovieResponseDto getMovieById(@PathVariable("id") int movieId){
+    public MovieResponseDto getMovieById(@PathVariable("movieId") int movieId){
         log.info("MovieController:getMovieById method started");
         return movieService.getMovieById(movieId);
     }

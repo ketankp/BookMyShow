@@ -2,7 +2,6 @@ package com.ketankp.bookmyshow.dto;
 
 import lombok.*;
 
-import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -14,7 +13,7 @@ public class ErrorResponseDto {
     private String code;
     private String message;
     private String details;
-    private Timestamp timestamp;
+    private String timestamp;
     private String path;
 
 }

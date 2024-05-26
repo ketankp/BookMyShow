@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class CinemaHallScreensResponseDto {
+    private int cinemaHallScreensId;
     private String screenType;
     private Integer noOfSeats;
 }
