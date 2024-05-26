@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class MovieResponseDto {
+    private int movieId;
     private String movieName;
     private String movieGenre;
     private int movieDurationInMinutes;

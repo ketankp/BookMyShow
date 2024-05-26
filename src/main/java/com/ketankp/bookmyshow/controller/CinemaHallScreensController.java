@@ -18,9 +18,9 @@ public class CinemaHallScreensController {
 
     private final CinemaHallScreensService cinemaHallScreensService;
 
-    @GetMapping("{id}")
+    @GetMapping("{cinemaHallId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<CinemaHallScreensResponseDto> getCinemaHallScreensByCinemaHallId(@PathVariable("id") int cinemaHallId){
+    public List<CinemaHallScreensResponseDto> getCinemaHallScreensByCinemaHallId(@PathVariable("cinemaHallId") int cinemaHallId){
         log.info("CinemaHallScreensController:getCinemaHallScreensByCinemaHallId method started");
         return cinemaHallScreensService.getCinemaHallScreensByCinemaHallId(cinemaHallId);
     }

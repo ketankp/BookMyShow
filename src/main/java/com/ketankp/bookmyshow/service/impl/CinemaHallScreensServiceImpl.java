@@ -38,6 +38,7 @@ public class CinemaHallScreensServiceImpl implements CinemaHallScreensService {
         for(CinemaHallScreens obj : cinemaHallScreensList){
             cinemaHallScreensResponseDto.add(
                     CinemaHallScreensResponseDto.builder()
+                            .cinemaHallScreensId(obj.getCinemaHallScreensId())
                             .noOfSeats(obj.getNoOfSeats())
                             .screenType(obj.getScreenType().getScreenTypeName())
                             .build()
